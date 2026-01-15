@@ -3,197 +3,224 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fragmentos de un Niño Roto</title>
+    <title>Manual para ser Invisible</title>
     <link href="https://fonts.googleapis.com/css2?family=Nanum+Pen+Script&display=swap" rel="stylesheet">
 
     <style>
         :root {
-            --bg-color: #c8c8c8; /* Gris cemento, frío */
-            --text-color: #1a1a1a;
-            --trauma-color: #610000;
-            --hope-color: #7a734d;
+            --bg-color: #b0b0b0; /* Gris más oscuro, como cemento mojado */
+            --text-color: #050505;
+            --trauma-color: #5a0000;
+            --hope-color: #6d6845;
         }
 
         body {
             margin: 0; padding: 0;
             background-color: var(--bg-color);
-            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='5' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.2'/%3E%3C/svg%3E");
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='5' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.25'/%3E%3C/svg%3E");
             color: var(--text-color);
             font-family: 'Nanum Pen Script', cursive;
-            font-size: 28px; line-height: 1.4;
+            font-size: 28px; line-height: 1.3;
             display: flex; justify-content: center; min-height: 100vh;
-            overflow-x: hidden;
         }
 
         #main-container {
-            width: 90%; max-width: 600px;
-            padding: 80px 20px 200px;
+            width: 95%; max-width: 650px;
+            padding: 100px 20px 300px;
             display: flex; flex-direction: column; align-items: center;
         }
 
-        /* --- PANTALLA DE ADVERTENCIA --- */
+        /* --- PANTALLA DE INICIO --- */
         #warning-screen {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: #000; color: #7a2121;
+            background: #000; color: #fff;
             display: flex; flex-direction: column; justify-content: center; align-items: center;
-            z-index: 1000; text-align: center; padding: 20px;
-        }
-        #warning-btn {
-            margin-top: 30px; padding: 10px 25px; background: #1a1a1a; color: #fff;
-            border: 1px solid #7a2121; cursor: pointer; font-size: 18px;
+            z-index: 1000; text-align: center; cursor: pointer;
         }
 
-        /* --- ELEMENTOS DE LA HISTORIA --- */
+        /* --- ELEMENTOS DE NARRATIVA --- */
         .story-segment {
-            opacity: 0; transform: translateY(40px);
-            transition: opacity 1.5s ease, transform 1.5s ease;
-            margin-bottom: 120px; display: none; width: 100%;
+            opacity: 0; transform: translateY(50px);
+            transition: opacity 2s ease, transform 2s ease;
+            margin-bottom: 150px; display: none; width: 100%;
+            position: relative;
         }
         .story-segment.active { display: block; opacity: 1; transform: translateY(0); }
 
-        /* --- DIBUJOS SVG (ESTILO SUCIO/BURTON) --- */
-        .sketch-container {
-            width: 100%; display: flex; justify-content: center; margin-bottom: 30px;
-        }
-        .sketch-svg {
-            max-width: 220px; fill: none; stroke: #111; stroke-width: 2;
-            filter: url(#rough-filter);
-            animation: tremor 4s infinite alternate;
+        /* --- DIBUJOS TIPO BURTON / GRUNGE --- */
+        .sketch-box { width: 100%; display: flex; justify-content: center; margin-bottom: 40px; }
+        .sketch {
+            max-width: 250px; fill: none; stroke: #000; stroke-width: 2.5;
+            filter: url(#distort); animation: pulse 6s infinite alternate;
         }
 
-        @keyframes tremor {
-            0% { transform: scale(1) rotate(0deg); }
-            50% { transform: scale(1.02) rotate(1deg); }
-            100% { transform: scale(0.98) rotate(-1deg); }
+        @keyframes pulse {
+            0% { transform: scale(1) skew(0deg); }
+            100% { transform: scale(1.05) skew(1deg); }
         }
 
-        /* --- EFECTOS DE TEXTO --- */
-        .trauma-text { color: var(--trauma-color); font-weight: bold; animation: shake 0.2s infinite; display: inline-block; }
-        @keyframes shake { 0% { transform: translate(1px, 1px); } 50% { transform: translate(-1px, -1px); } 100% { transform: translate(1px, -1px); } }
-        .desperate-text { color: var(--hope-color); font-style: italic; }
-        .whisper { font-size: 0.8em; color: #555; display: block; margin-top: 10px; border-left: 2px solid #555; padding-left: 15px; }
+        /* --- CLASES DE TEXTO --- */
+        .trauma { color: var(--trauma-color); font-weight: bold; animation: glitch 0.3s infinite; display: inline-block; }
+        @keyframes glitch { 0% { opacity: 1; transform: translateX(0); } 50% { opacity: 0.8; transform: translateX(1px); } 100% { opacity: 1; transform: translateX(-1px); } }
+        
+        .hope { color: var(--hope-color); text-decoration: underline wavy; }
+        
+        .ghost-text { opacity: 0.4; font-size: 0.8em; font-style: italic; display: block; margin-top: 15px; }
 
-        /* --- BOTÓN CONTINUAR --- */
-        #continue-btn {
-            background: none; border: 1px solid #111; font-family: 'Nanum Pen Script', cursive;
-            padding: 10px 40px; cursor: pointer; font-size: 22px; opacity: 0.6; margin-top: 50px;
+        /* --- BOTÓN --- */
+        #next-btn {
+            position: fixed; bottom: 30px; 
+            background: none; border: 1px solid #000;
+            font-family: 'Nanum Pen Script', cursive; font-size: 24px;
+            padding: 10px 30px; cursor: pointer; transition: 0.3s;
+            background: rgba(176, 176, 176, 0.8);
         }
-        #continue-btn:hover { opacity: 1; background: rgba(0,0,0,0.05); }
-        #continue-btn.hidden { display: none; }
+        #next-btn:hover { background: #000; color: #fff; }
 
     </style>
 </head>
 <body>
 
     <svg style="display: none;">
-        <defs>
-            <filter id="rough-filter">
-                <feTurbulence type="fractalNoise" baseFrequency="0.05" numOctaves="3" result="noise" />
-                <feDisplacementMap in="SourceGraphic" in2="noise" scale="4" />
-            </filter>
-        </defs>
+        <filter id="distort">
+            <feTurbulence type="fractalNoise" baseFrequency="0.05" numOctaves="2" result="noise" />
+            <feDisplacementMap in="SourceGraphic" in2="noise" scale="5" />
+        </filter>
     </svg>
 
-    <div id="warning-screen">
-        <h2>ESTO NO ES UN JUEGO</h2>
-        <p>Esta historia contiene descripciones crudas de abuso infantil, autodesprecio y trauma.<br>Si eres sensible, por favor cierra esta ventana.</p>
-        <button id="warning-btn">Acepto el dolor</button>
+    <div id="warning-screen" onclick="start()">
+        <h1>EL LIBRO DE LAS MANCHAS</h1>
+        <p>[ Haz clic para abrir una herida ]</p>
     </div>
 
     <div id="main-container">
 
         <div class="story-segment">
-            <div class="sketch-container">
-                <svg class="sketch-svg" viewBox="0 0 100 100">
-                    <path d="M20,80 L80,80 L50,20 Z" /> <path d="M45,80 L45,60 L55,60 L55,80" /> <circle cx="50" cy="45" r="5" /> </svg>
+            <div class="sketch-box">
+                <svg class="sketch" viewBox="0 0 100 100">
+                    <circle cx="50" cy="50" r="30" /> <path d="M40,50 L60,50 M50,40 L50,60" stroke-width="4" /> </svg>
             </div>
-            <p>Mamá dice que las casas son para protegerse del viento. Pero aquí el viento vive dentro. Sale de su boca cuando llega cansada. Sale de sus manos cuando <span class="trauma-text">me toca sin querer quererme</span>.</p>
-            <p>Hoy hice un dibujo para ella. Recorté un corazón de una revista vieja. Me corté un poco el dedo con las tijeras, pero no lloré. <span class="desperate-text">La sangre era roja como el amor, así que la usé para pintar los bordes.</span></p>
+            <p>El cereal está blando. Ha estado en la leche desde las seis de la mañana. Me gusta cuando se vuelve una masa gris, porque así no hace ruido al masticar.</p>
+            <p>Papá está sentado enfrente. No me mira. Mira el periódico como si fuera un escudo de acero. <span class="ghost-text">Si no hago ruido, no existo. Si no existo, no puede estar enojado conmigo.</span></p>
         </div>
 
         <div class="story-segment">
-            <div class="sketch-container">
-                <svg class="sketch-svg" viewBox="0 0 100 100">
-                    <path d="M30,50 Q50,20 70,50 Q50,80 30,50" /> <path d="M20,20 L40,40 M80,20 L60,40" /> <path d="M50,50 L50,90" /> </svg>
+            <div class="sketch-box">
+                <svg class="sketch" viewBox="0 0 100 100">
+                    <path d="M20,70 Q50,20 80,70" /> <circle cx="30" cy="40" r="5" /> <path d="M20,70 L10,90 M80,70 L90,90" /> </svg>
             </div>
-            <p>Esperé detrás del sofá. Mis rodillas estaban frías. Cuando ella entró, olía a esa medicina amarga que siempre bebe de vasos pequeños.</p>
-            <p>"¡Sorpresa!", dije bajito. Le extendí mi corazón de papel con mi dedo vendado con cinta sucia. <span class="desperate-text">Pensé que me cargaría. Pensé que por fin me vería.</span></p>
-            <span class="whisper">El silencio se hizo tan grande que casi no podía respirar.</span>
+            <p>Hay un gato negro viviendo en mi estómago. Se llama Hambre. Cuando mamá se olvida de la cena porque está "descansando" con sus botellas blancas, el gato empieza a arañar por dentro.</p>
+            <p><span class="hope">Le digo al gato que sea paciente.</span> Que mañana, si limpio bien los zapatos de papá, quizás me den un trozo de pan que no tenga moho verde.</p>
         </div>
 
         <div class="story-segment">
-            <div class="sketch-container">
-                <svg class="sketch-svg" viewBox="0 0 100 100">
-                    <path d="M10,90 L90,10" stroke-width="4" /> <path d="M20,10 L80,90" stroke-width="4" />
-                    <circle cx="50" cy="50" r="10" /> 
+            <div class="sketch-box">
+                <svg class="sketch" viewBox="0 0 100 100">
+                    <path d="M10,10 L90,90 M90,10 L10,90" /> <path d="M50,20 C30,20 20,40 20,60 C20,80 50,90 80,60" /> </svg>
+            </div>
+            <p>Dibujé una familia en la pared del fondo del armario. El niño tiene una sonrisa gigante, tanto que le llega a las orejas. <span class="trauma">Pero me asusté.</span></p>
+            <p>Me asusté porque si ellos ven que el niño del dibujo es feliz, pensarán que soy un desagradecido. Así que usé un carbón negro y le borré la cara hasta que solo quedó una mancha.</p>
+        </div>
+
+        <div class="story-segment">
+            <div class="sketch-box">
+                <svg class="sketch" viewBox="0 0 100 100">
+                    <path d="M10,20 L30,80 L50,10 L70,90 L90,30" /> <circle cx="50" cy="50" r="5" fill="black" />
                 </svg>
             </div>
-            <p>Ella no sonrió. Sus ojos se volvieron pequeños y negros. "¡Me has manchado la alfombra!", gritó. No era su voz. Era el <span class="trauma-text">Monstruo de los Gritos</span> que vive en su garganta.</p>
-            <p>Me quitó el papel y lo rompió frente a mi cara. Los pedazos cayeron como nieve sucia. Me dolió más que el corte de la tijera. <span class="trauma-text">Me dolió en el lugar donde se guardan los abrazos que nunca recibo.</span></p>
+            <p>Anoche el cielo se rompió. O quizás fue la ventana. Hubo un ruido de cristal besando el suelo. <span class="trauma">CRASH.</span></p>
+            <p>Me hice una bolita debajo de las mantas. Las mantas huelen a pis viejo y a miedo, pero son mi armadura. Escuché los pasos de gigante de papá. <span class="ghost-text">Él no buscaba el cristal. Me buscaba a mí para culparme del ruido.</span></p>
         </div>
 
         <div class="story-segment">
-            <div class="sketch-container">
-                <svg class="sketch-svg" viewBox="0 0 100 100">
-                    <rect x="30" y="20" width="40" height="60" /> <path d="M35,40 L65,40 M35,60 L65,60" /> </svg>
+            <div class="sketch-box">
+                <svg class="sketch" viewBox="0 0 100 100">
+                    <path d="M30,30 C50,0 70,30 50,50 C30,70 50,100 50,100" /> </svg>
             </div>
-            <p>Ahora estoy en el cuarto oscuro. Dice que es para que piense en lo malo que soy. <span class="whisper">Intento pensar, pero solo puedo sentir el latido de mi brazo donde me apretó.</span></p>
-            <p>Tengo hambre, pero el hambre es un viejo amigo. Le hablo a las sombras. "Lo siento", les digo. "Mañana seré mejor. Mañana seré invisible".</p>
+            <p>Hoy mamá me pidió un abrazo. Olía a humo y a olvido. Me acerqué temblando, como un perrito que sabe que le van a pegar pero igual mueve la cola.</p>
+            <p>Me apretó tanto que no podía respirar. <span class="hope">Por un segundo pensé: "Me quiere".</span> Pero luego me apartó de un golpe porque mis manos estaban "sucias". <span class="trauma">Sus manos siempre están más sucias, pero ella no lo sabe.</span></p>
         </div>
 
         <div class="story-segment">
-            <div class="sketch-container">
-                <svg class="sketch-svg" viewBox="0 0 100 100">
-                    <path d="M50,10 C20,10 10,50 10,70 C10,90 90,90 90,70 C90,50 80,10 50,10 Z" fill="#111" /> <circle cx="40" cy="40" r="2" fill="white" />
-                    <circle cx="60" cy="40" r="2" fill="white" />
+            <div class="sketch-box">
+                <svg class="sketch" viewBox="0 0 100 100">
+                    <rect x="25" y="25" width="50" height="50" />
+                    <circle cx="50" cy="50" r="2" />
                 </svg>
             </div>
-            <p>He decidido que no quiero ser un niño. Los niños sienten frío. Los niños quieren amor y el amor es una trampa de espinas.</p>
-            <p>Quiero ser una mancha en la pared. <span class="trauma-text">Si soy una mancha, nadie puede romperme.</span> Si soy una mancha, mamá no tendrá que gritarme por existir.</p>
-            <span class="whisper">A veces, cuando ella llora en la otra habitación, quiero ir a consolarla. Pero recuerdo que yo soy el veneno que la hace llorar.</span>
+            <p>Mi armario es una nave espacial. Las polillas son las estrellas. Cuando cierro la puerta y no hay luz, puedo viajar a un planeta donde los padres son de algodón y no tienen manos para golpear ni bocas para gritar.</p>
+            <p>Pero el oxígeno se acaba pronto. <span class="ghost-text">Tengo que salir y volver a ser el niño de madera que no siente nada.</span></p>
         </div>
 
         <div class="story-segment">
-            <div class="sketch-container">
-                <svg class="sketch-svg" viewBox="0 0 100 100">
-                    <circle cx="50" cy="50" r="40" stroke-dasharray="2,2" /> <path d="M50,10 L50,30 M50,70 L50,90" />
+            <div class="sketch-box">
+                <svg class="sketch" viewBox="0 0 100 100">
+                    <path d="M20,50 L80,50" stroke="#5a0000" stroke-width="8" />
                 </svg>
             </div>
-            <p>Mañana saldré de aquí. Limpiaré la alfombra. Haré su cama. No hablaré.</p>
-            <p>Y esperaré a que ella tenga un momento de paz. Entonces volveré a intentar que me quiera. <span class="trauma-text">Aunque me mate.</span> Porque un segundo de su mano en mi pelo vale mil años en la oscuridad.</p>
-            <p><span class="desperate-text">Por favor... alguien... solo un abrazo que no termine en golpe...</span></p>
+            <p>Tengo un mapa en la pierna. Es de color morado y amarillo. Papá lo dibujó ayer con su cinturón porque dije que tenía hambre.</p>
+            <p><span class="trauma">Es mi culpa.</span> No debí tener hambre. Los niños buenos se alimentan de aire y de obediencia. <span class="hope">Mañana seré más bueno. No comeré en todo el día.</span></p>
         </div>
 
-        <button id="continue-btn">... por favor ...</button>
+        <div class="story-segment">
+            <p>Las paredes hablan cuando ellos duermen. Dicen que soy un error. Dicen que el espacio que ocupo debería ser para alguien que sí valga la pena.</p>
+            <p>Yo les pido perdón a las paredes. Les prometo que me haré más pequeño cada día hasta que solo sea un granito de polvo que nadie note.</p>
+        </div>
+
+        <div class="story-segment">
+            <div class="sketch-box">
+                <svg class="sketch" viewBox="0 0 100 100">
+                    <path d="M10,90 Q50,10 90,90" fill="black" />
+                </svg>
+            </div>
+            <p>Mis manos están desapareciendo. A veces las miro y las veo transparentes. Creo que por fin lo estoy logrando. <span class="trauma">Me estoy volviendo una sombra.</span></p>
+            <p>Las sombras no sienten dolor. Las sombras no lloran. Las sombras solo esperan.</p>
+        </div>
+
+        <div class="story-segment">
+            <p>Hoy no hubo cereal. No hubo nada. Papá y mamá se han ido a dormir temprano después de pelear por horas.</p>
+            <p>Me he sentado a la mesa vacía. He puesto un plato invisible y una cuchara invisible. <span class="hope">He cenado amor invisible. Sabe a nada.</span></p>
+        </div>
+
+        <div class="story-segment">
+            <p>Si pudiera pedir un deseo, no pediría juguetes. Pediría que alguien me mirara y no viera un estorbo.</p>
+            <p>Que alguien pusiera su mano en mi cabeza y no fuera para empujarme. <span class="trauma">Pero sé que eso es para los niños de la tele. Yo no soy un niño de verdad.</span></p>
+        </div>
+
+        <div class="story-segment">
+            <p>Mañana será igual. Me despertaré, seré una estatua, tendré hambre, me haré daño para sentir que sigo vivo, y esperaré un abrazo que nunca llegará.</p>
+            <p><span class="trauma">Y los querré.</span> Porque no tengo a nadie más a quien querer. <span class="ghost-text">Por favor... alguien... ayúdenme a desaparecer del todo...</span></p>
+        </div>
+
+        <button id="next-btn">... avanzar en el dolor ...</button>
+
     </div>
 
     <script>
-        const warningScreen = document.getElementById('warning-screen');
-        const warningBtn = document.getElementById('warning-btn');
         const segments = document.querySelectorAll('.story-segment');
-        const continueBtn = document.getElementById('continue-btn');
-        
+        const nextBtn = document.getElementById('next-btn');
+        const warning = document.getElementById('warning-screen');
         let current = 0;
 
-        warningBtn.onclick = () => {
-            warningScreen.style.display = 'none';
+        function start() {
+            warning.style.display = 'none';
             segments[0].classList.add('active');
-        };
+        }
 
-        continueBtn.onclick = () => {
+        nextBtn.onclick = () => {
             current++;
             if (current < segments.length) {
                 segments[current].classList.add('active');
                 segments[current].scrollIntoView({ behavior: 'smooth' });
                 
-                // Efecto de parpadeo al avanzar (más dramático)
-                document.body.style.backgroundColor = '#111';
-                setTimeout(() => { document.body.style.backgroundColor = '#c8c8c8'; }, 50);
+                // Efecto visual de parpadeo traumático
+                document.body.style.filter = "invert(1)";
+                setTimeout(() => { document.body.style.filter = "invert(0)"; }, 100);
 
             } else {
-                continueBtn.innerHTML = "NADIE VINO.";
-                continueBtn.style.color = "red";
-                continueBtn.disabled = true;
+                nextBtn.innerHTML = "EL NIÑO SE HA IDO.";
+                nextBtn.style.color = "red";
+                nextBtn.disabled = true;
             }
         };
     </script>

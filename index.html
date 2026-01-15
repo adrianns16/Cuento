@@ -3,124 +3,83 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>El Cuaderno Negro</title>
+    <title>Fragmentos de un Niño Roto</title>
     <link href="https://fonts.googleapis.com/css2?family=Nanum+Pen+Script&display=swap" rel="stylesheet">
 
     <style>
-        /* --- ESTILOS GENERALES --- */
         :root {
-            --bg-color: #e0e0e0; /* Gris claro, papel sucio */
-            --text-color: #111; /* Casi negro */
-            --trauma-color: #7a2121; /* Rojo oscuro */
-            --hope-color: #8c865f; /* Dorado apagado */
+            --bg-color: #c8c8c8; /* Gris cemento, frío */
+            --text-color: #1a1a1a;
+            --trauma-color: #610000;
+            --hope-color: #7a734d;
         }
 
         body {
-            margin: 0;
-            padding: 0;
+            margin: 0; padding: 0;
             background-color: var(--bg-color);
-            /* Textura de papel granulado */
-            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.15'/%3E%3C/svg%3E");
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='5' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.2'/%3E%3C/svg%3E");
             color: var(--text-color);
             font-family: 'Nanum Pen Script', cursive;
-            font-size: 28px;
-            line-height: 1.5;
+            font-size: 28px; line-height: 1.4;
+            display: flex; justify-content: center; min-height: 100vh;
             overflow-x: hidden;
-            display: flex;
-            justify-content: center;
-            min-height: 100vh;
         }
 
         #main-container {
-            width: 85%;
-            max-width: 650px;
-            padding: 60px 25px 150px;
-            box-sizing: border-box;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+            width: 90%; max-width: 600px;
+            padding: 80px 20px 200px;
+            display: flex; flex-direction: column; align-items: center;
         }
 
         /* --- PANTALLA DE ADVERTENCIA --- */
         #warning-screen {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: #080808; color: #ccc;
+            background: #000; color: #7a2121;
             display: flex; flex-direction: column; justify-content: center; align-items: center;
-            z-index: 1000; padding: 40px; text-align: center; font-family: sans-serif; letter-spacing: 1px;
+            z-index: 1000; text-align: center; padding: 20px;
         }
         #warning-btn {
-            margin-top: 40px; padding: 15px 30px; background: #222; color: #eee;
-            border: 1px solid #444; cursor: pointer; font-size: 16px; transition: all 0.3s ease;
+            margin-top: 30px; padding: 10px 25px; background: #1a1a1a; color: #fff;
+            border: 1px solid #7a2121; cursor: pointer; font-size: 18px;
         }
-        #warning-btn:hover { background: #444; border-color: #fff; }
 
-        /* --- SEGMENTOS DE LA HISTORIA --- */
+        /* --- ELEMENTOS DE LA HISTORIA --- */
         .story-segment {
-            opacity: 0;
-            transform: translateY(50px);
-            transition: opacity 1s ease-out, transform 1s ease-out;
-            margin-bottom: 80px; /* Espacio entre bloques */
-            display: none;
-            text-align: left;
-            width: 100%;
-            padding-bottom: 40px;
-            border-bottom: 2px dashed rgba(0,0,0,0.1); /* Línea punteada como de cuaderno */
+            opacity: 0; transform: translateY(40px);
+            transition: opacity 1.5s ease, transform 1.5s ease;
+            margin-bottom: 120px; display: none; width: 100%;
         }
+        .story-segment.active { display: block; opacity: 1; transform: translateY(0); }
 
-        .story-segment.active {
-            display: block;
-            opacity: 1;
-            transform: translateY(0);
+        /* --- DIBUJOS SVG (ESTILO SUCIO/BURTON) --- */
+        .sketch-container {
+            width: 100%; display: flex; justify-content: center; margin-bottom: 30px;
         }
-        .story-segment:last-child { border-bottom: none; }
-
-
-        /* --- ESTILOS PARA LOS DIBUJOS SVG (Estilo Burton/Boceto) --- */
-        .illustration-container {
-            width: 100%;
-            display: flex;
-            justify-content: center;
-            margin-bottom: 25px;
-            opacity: 0.85;
-        }
-
-        /* Clase general para todos los dibujos SVG */
         .sketch-svg {
-            max-width: 200px; /* Tamaño controlado */
-            height: auto;
-            fill: none; /* Sin relleno, solo líneas */
-            stroke: #1a1a1a; /* Color de línea: carbón */
-            stroke-width: 2.5;
-            stroke-linecap: round;
-            stroke-linejoin: round;
-            /* Aplicamos un filtro para que las líneas se vean irregulares y temblorosas */
-            filter: url(#rough-paper-filter);
-            /* Animación sutil de inestabilidad */
-            animation: subtle-shake 5s infinite alternate ease-in-out;
+            max-width: 220px; fill: none; stroke: #111; stroke-width: 2;
+            filter: url(#rough-filter);
+            animation: tremor 4s infinite alternate;
         }
 
-        @keyframes subtle-shake {
-            0% { transform: rotate(0deg) scale(1); }
-            50% { transform: rotate(0.5deg) scale(1.02); }
-            100% { transform: rotate(-0.5deg) scale(0.98); }
+        @keyframes tremor {
+            0% { transform: scale(1) rotate(0deg); }
+            50% { transform: scale(1.02) rotate(1deg); }
+            100% { transform: scale(0.98) rotate(-1deg); }
         }
 
+        /* --- EFECTOS DE TEXTO --- */
+        .trauma-text { color: var(--trauma-color); font-weight: bold; animation: shake 0.2s infinite; display: inline-block; }
+        @keyframes shake { 0% { transform: translate(1px, 1px); } 50% { transform: translate(-1px, -1px); } 100% { transform: translate(1px, -1px); } }
+        .desperate-text { color: var(--hope-color); font-style: italic; }
+        .whisper { font-size: 0.8em; color: #555; display: block; margin-top: 10px; border-left: 2px solid #555; padding-left: 15px; }
 
-        /* --- EFECTOS ESPECIALES DE TEXTO --- */
-        @keyframes jitter { 0% { transform: translate(0,0) rotate(0deg); } 25% { transform: translate(1.5px, -1.5px) rotate(0.5deg); } 50% { transform: translate(-1.5px, 1.5px) rotate(-0.5deg); } 75% { transform: translate(-1px, -1px) rotate(0deg); } 100% { transform: translate(0,0) rotate(0deg); }}
-        .trauma-text { display: inline-block; color: var(--trauma-color); font-weight: bold; animation: jitter 0.15s infinite linear; }
-        .desperate-text { font-style: italic; color: var(--hope-color); text-shadow: 0 0 10px rgba(120, 115, 80, 0.4); }
-        .whisper-text { font-size: 0.85em; color: #444; display: block; margin-top: 20px; margin-left: 30px; font-style: italic; }
-
-        /* --- BOTÓN DE CONTINUAR --- */
+        /* --- BOTÓN CONTINUAR --- */
         #continue-btn {
-            background: none; border: none; font-family: 'Nanum Pen Script', cursive; font-size: 24px; color: var(--text-color); cursor: pointer; padding: 25px; margin-top: 40px; outline: none; opacity: 0.5; transition: opacity 0.5s, transform 0.5s; animation: flicker-bulb 5s infinite alternate ease-in-out;
+            background: none; border: 1px solid #111; font-family: 'Nanum Pen Script', cursive;
+            padding: 10px 40px; cursor: pointer; font-size: 22px; opacity: 0.6; margin-top: 50px;
         }
-        @keyframes flicker-bulb { 0% { opacity: 0.3; } 50% { opacity: 0.6; } 100% { opacity: 0.4; } }
-        #continue-btn:hover { opacity: 1; transform: scale(1.05); }
+        #continue-btn:hover { opacity: 1; background: rgba(0,0,0,0.05); }
         #continue-btn.hidden { display: none; }
-        
-        .the-end { text-align: center; margin-top: 120px; font-size: 1em; color: var(--trauma-color); opacity: 0.8; letter-spacing: 3px; }
 
     </style>
 </head>
@@ -128,128 +87,115 @@
 
     <svg style="display: none;">
         <defs>
-            <filter id="rough-paper-filter">
-                <feTurbulence type="fractalNoise" baseFrequency="0.04" numOctaves="3" result="noise" />
-                <feDisplacementMap in="SourceGraphic" in2="noise" scale="3" xChannelSelector="R" yChannelSelector="G" />
+            <filter id="rough-filter">
+                <feTurbulence type="fractalNoise" baseFrequency="0.05" numOctaves="3" result="noise" />
+                <feDisplacementMap in="SourceGraphic" in2="noise" scale="4" />
             </filter>
         </defs>
     </svg>
 
-
     <div id="warning-screen">
-        <p style="color: var(--trauma-color); letter-spacing: 3px; font-size: 1.2em;">ADVERTENCIA</p>
-        <p style="max-width: 600px; line-height: 1.8; margin-bottom: 40px;">Esta es una narrativa visual de terror psicológico centrada en el trauma infantil y el apego desorganizado. Contiene bocetos y textos perturbadores desde la perspectiva de un niño. Se recomienda discreción.</p>
-        <button id="warning-btn">Entiendo y deseo entrar</button>
+        <h2>ESTO NO ES UN JUEGO</h2>
+        <p>Esta historia contiene descripciones crudas de abuso infantil, autodesprecio y trauma.<br>Si eres sensible, por favor cierra esta ventana.</p>
+        <button id="warning-btn">Acepto el dolor</button>
     </div>
-
 
     <div id="main-container">
 
-        <div class="story-segment active">
-            <div class="illustration-container">
-                <svg class="sketch-svg" viewBox="0 0 150 150">
-                    <path d="M10,10 L10,140 L140,140" /> <circle cx="40" cy="100" r="12" /> <path d="M40,112 L40,138 M30,138 L50,138" /> </svg>
+        <div class="story-segment">
+            <div class="sketch-container">
+                <svg class="sketch-svg" viewBox="0 0 100 100">
+                    <path d="M20,80 L80,80 L50,20 Z" /> <path d="M45,80 L45,60 L55,60 L55,80" /> <circle cx="50" cy="45" r="5" /> </svg>
             </div>
-            <p>Hoy me he portado muy bien. Soy una estatua en el rincón. Las estatuas no hacen ruido y no molestan.</p>
-            <p><span class="desperate-text">Si soy una estatua perfecta, quizás mamá me quiera cuando llegue.</span> Quizás sonría de verdad.</p>
+            <p>Mamá dice que las casas son para protegerse del viento. Pero aquí el viento vive dentro. Sale de su boca cuando llega cansada. Sale de sus manos cuando <span class="trauma-text">me toca sin querer quererme</span>.</p>
+            <p>Hoy hice un dibujo para ella. Recorté un corazón de una revista vieja. Me corté un poco el dedo con las tijeras, pero no lloré. <span class="desperate-text">La sangre era roja como el amor, así que la usé para pintar los bordes.</span></p>
         </div>
 
         <div class="story-segment">
-             <div class="illustration-container">
-                <svg class="sketch-svg" viewBox="0 0 150 150">
-                    <rect x="40" y="10" width="70" height="130" /> <path d="M60,140 L65,50 C65,35 75,35 75,50 L80,140" fill="#1a1a1a" stroke="none" opacity="0.6"/> <path d="M90,140 L95,70 C95,60 105,60 105,70 L110,140" fill="#1a1a1a" stroke="none" opacity="0.6"/> </svg>
+            <div class="sketch-container">
+                <svg class="sketch-svg" viewBox="0 0 100 100">
+                    <path d="M30,50 Q50,20 70,50 Q50,80 30,50" /> <path d="M20,20 L40,40 M80,20 L60,40" /> <path d="M50,50 L50,90" /> </svg>
             </div>
-            <p>La puerta se abre. Huelen a frío y a cansancio.</p>
-            <p>Corro hacia ellos pero me detengo. <span class="desperate-text">"Hola mami, hola papi. Hoy fui bueno."</span></p>
-            <p>Mamá me mira con ojos vacíos. "Quítate", dice. Me empuja suavemente. <span class="whisper-text">Solo quería que me vieran.</span></p>
+            <p>Esperé detrás del sofá. Mis rodillas estaban frías. Cuando ella entró, olía a esa medicina amarga que siempre bebe de vasos pequeños.</p>
+            <p>"¡Sorpresa!", dije bajito. Le extendí mi corazón de papel con mi dedo vendado con cinta sucia. <span class="desperate-text">Pensé que me cargaría. Pensé que por fin me vería.</span></p>
+            <span class="whisper">El silencio se hizo tan grande que casi no podía respirar.</span>
         </div>
 
         <div class="story-segment">
-             <div class="illustration-container">
-                <svg class="sketch-svg" viewBox="0 0 150 100">
-                    <path d="M10,50 L30,20 L50,80 L70,10 L90,90 L110,30 L130,70" stroke-width="3"/> <circle cx="75" cy="50" r="20" stroke-dasharray="5,5"/> <circle cx="75" cy="50" r="35" stroke-dasharray="10,10" opacity="0.5"/>
+            <div class="sketch-container">
+                <svg class="sketch-svg" viewBox="0 0 100 100">
+                    <path d="M10,90 L90,10" stroke-width="4" /> <path d="M20,10 L80,90" stroke-width="4" />
+                    <circle cx="50" cy="50" r="10" /> 
                 </svg>
             </div>
-            <p>Empiezan los ruidos fuertes en la cocina. Las sartenes suenan como campanas enojadas. Las voces suben, agudas y rápidas.</p>
-            <p>Tengo miedo. Quiero esconderme, pero también quiero arreglarlo. <span class="desperate-text">Quiero que estén felices para que puedan quererme.</span></p>
+            <p>Ella no sonrió. Sus ojos se volvieron pequeños y negros. "¡Me has manchado la alfombra!", gritó. No era su voz. Era el <span class="trauma-text">Monstruo de los Gritos</span> que vive en su garganta.</p>
+            <p>Me quitó el papel y lo rompió frente a mi cara. Los pedazos cayeron como nieve sucia. Me dolió más que el corte de la tijera. <span class="trauma-text">Me dolió en el lugar donde se guardan los abrazos que nunca recibo.</span></p>
         </div>
 
         <div class="story-segment">
-             <div class="illustration-container">
-                <svg class="sketch-svg" viewBox="0 0 150 120">
-                    <path d="M100,20 C80,20 60,40 50,60 C40,80 30,80 20,70" stroke-width="4"/> <path d="M50,60 L40,90 M50,60 L60,90 M50,60 L70,80" stroke-width="3"/> <circle cx="45" cy="85" r="10" stroke="#7a2121"/> </svg>
+            <div class="sketch-container">
+                <svg class="sketch-svg" viewBox="0 0 100 100">
+                    <rect x="30" y="20" width="40" height="60" /> <path d="M35,40 L65,40 M35,60 L65,60" /> </svg>
             </div>
-            <p>Se me cayó un vaso. Fue un accidente. El estruendo fue terrible.</p>
-            <p>Papá vino caminando muy despacio. <span class="trauma-text">Sus pasos hacían temblar el suelo.</span></p>
+            <p>Ahora estoy en el cuarto oscuro. Dice que es para que piense en lo malo que soy. <span class="whisper">Intento pensar, pero solo puedo sentir el latido de mi brazo donde me apretó.</span></p>
+            <p>Tengo hambre, pero el hambre es un viejo amigo. Le hablo a las sombras. "Lo siento", les digo. "Mañana seré mejor. Mañana seré invisible".</p>
         </div>
 
         <div class="story-segment">
-             <div class="illustration-container">
-                <svg class="sketch-svg" viewBox="0 0 150 80">
-                    <path d="M10,40 C40,30 110,30 140,40" stroke-width="5" stroke-linecap="round"/> <path d="M60,35 L80,45 M70,32 L90,42 M80,30 L100,40" stroke="#7a2121" stroke-width="2"/> </svg>
+            <div class="sketch-container">
+                <svg class="sketch-svg" viewBox="0 0 100 100">
+                    <path d="M50,10 C20,10 10,50 10,70 C10,90 90,90 90,70 C90,50 80,10 50,10 Z" fill="#111" /> <circle cx="40" cy="40" r="2" fill="white" />
+                    <circle cx="60" cy="40" r="2" fill="white" />
+                </svg>
             </div>
-            <p>Ahora me duele el brazo donde me agarró. Me apretó muy fuerte. Dijo que era para que aprendiera.</p>
-             <p><span class="whisper-text">Quizás el amor de verdad duele así.</span></p>
+            <p>He decidido que no quiero ser un niño. Los niños sienten frío. Los niños quieren amor y el amor es una trampa de espinas.</p>
+            <p>Quiero ser una mancha en la pared. <span class="trauma-text">Si soy una mancha, nadie puede romperme.</span> Si soy una mancha, mamá no tendrá que gritarme por existir.</p>
+            <span class="whisper">A veces, cuando ella llora en la otra habitación, quiero ir a consolarla. Pero recuerdo que yo soy el veneno que la hace llorar.</span>
         </div>
 
         <div class="story-segment">
-             <div class="illustration-container">
-                <svg class="sketch-svg" viewBox="0 0 150 100">
-                    <rect x="20" y="50" width="110" height="30" /> <path d="M30,50 C40,30 70,30 80,50" /> <line x1="20" y1="80" x2="20" y2="95" /> <line x1="130" y1="80" x2="130" y2="95" /> </svg>
+            <div class="sketch-container">
+                <svg class="sketch-svg" viewBox="0 0 100 100">
+                    <circle cx="50" cy="50" r="40" stroke-dasharray="2,2" /> <path d="M50,10 L50,30 M50,70 L50,90" />
+                </svg>
             </div>
-            <p>Estoy en mi cuarto. Está oscuro. Ellos están abajo, riéndose.</p>
-            <p>Abrazo mi almohada. Le cuento que me duele. <span class="desperate-text">La almohada no dice nada. Aquí nadie dice nada.</span></p>
+            <p>Mañana saldré de aquí. Limpiaré la alfombra. Haré su cama. No hablaré.</p>
+            <p>Y esperaré a que ella tenga un momento de paz. Entonces volveré a intentar que me quiera. <span class="trauma-text">Aunque me mate.</span> Porque un segundo de su mano en mi pelo vale mil años en la oscuridad.</p>
+            <p><span class="desperate-text">Por favor... alguien... solo un abrazo que no termine en golpe...</span></p>
         </div>
 
-        <div class="story-segment">
-             <div class="illustration-container">
-                 <svg class="sketch-svg" viewBox="0 0 100 100">
-                    <path d="M50,90 C20,60 0,35 25,15 C40,5 50,25 50,25 C50,25 60,5 75,15 C100,35 80,60 50,90 Z" />
-                    <line x1="35" y1="30" x2="65" y2="70" stroke-width="3" /> </svg>
-            </div>
-            <p>Debe ser mi culpa. Soy un niño roto. Mañana seré invisible. <span class="desperate-text">Y entonces, seguro que mañana sí me abrazan.</span></p>
-            <span class="whisper-text">Solo tengo que intentarlo más fuerte...</span>
-        </div>
-
-        <button id="continue-btn">... intentaré ser mejor ...</button>
-
+        <button id="continue-btn">... por favor ...</button>
     </div>
 
     <script>
-        // --- LÓGICA JAVASCRIPT ---
         const warningScreen = document.getElementById('warning-screen');
         const warningBtn = document.getElementById('warning-btn');
         const segments = document.querySelectorAll('.story-segment');
         const continueBtn = document.getElementById('continue-btn');
-        const mainContainer = document.getElementById('main-container');
         
-        let currentSegmentIndex = 0;
+        let current = 0;
 
-        warningBtn.addEventListener('click', () => {
-            warningScreen.style.opacity = '0';
-            setTimeout(() => {
-                warningScreen.style.display = 'none';
-                segments[0].classList.add('active');
-            }, 800);
-        });
+        warningBtn.onclick = () => {
+            warningScreen.style.display = 'none';
+            segments[0].classList.add('active');
+        };
 
-        continueBtn.addEventListener('click', () => {
-            currentSegmentIndex++;
+        continueBtn.onclick = () => {
+            current++;
+            if (current < segments.length) {
+                segments[current].classList.add('active');
+                segments[current].scrollIntoView({ behavior: 'smooth' });
+                
+                // Efecto de parpadeo al avanzar (más dramático)
+                document.body.style.backgroundColor = '#111';
+                setTimeout(() => { document.body.style.backgroundColor = '#c8c8c8'; }, 50);
 
-            if (currentSegmentIndex < segments.length) {
-                segments[currentSegmentIndex].classList.add('active');
-                segments[currentSegmentIndex].scrollIntoView({ behavior: 'smooth', block: 'start' });
             } else {
-                continueBtn.classList.add('hidden');
-                const endMessage = document.createElement('p');
-                endMessage.classList.add('story-segment', 'active', 'the-end');
-                endMessage.innerHTML = "Nadie vino.";
-                mainContainer.appendChild(endMessage);
-                endMessage.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                continueBtn.innerHTML = "NADIE VINO.";
+                continueBtn.style.color = "red";
+                continueBtn.disabled = true;
             }
-        });
-
-        segments.forEach(seg => seg.classList.remove('active'));
+        };
     </script>
 </body>
 </html>
